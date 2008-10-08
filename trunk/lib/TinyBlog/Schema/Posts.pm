@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components("Core");
+__PACKAGE__->load_components(qw/PK::Auto Core/);
 __PACKAGE__->table("posts");
 __PACKAGE__->add_columns(
   "id",
