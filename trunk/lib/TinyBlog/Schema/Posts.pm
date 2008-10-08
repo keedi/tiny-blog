@@ -29,4 +29,27 @@ __PACKAGE__->set_primary_key("id");
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
+
+__PACKAGE__->has_many(
+    post_replies => 'TinyBlog::Schema::PostReplies',
+    'post_id',
+    { cascading_delete => 1, },
+);
+
+__PACKAGE__->many_to_many(
+    replies => 'post_replies',
+    'reply',
+);
+
+__PACKAGE__->has_many(
+    post_tags => 'TinyBlog::Schema::PostTags',
+    'post_id',
+    { cascading_delete => 1, },
+);
+
+__PACKAGE__->many_to_many(
+    tags => 'post_tags',
+    'tag',
+);
+
 1;

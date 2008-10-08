@@ -21,4 +21,15 @@ __PACKAGE__->set_primary_key("user_id", "role_id");
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
+
+__PACKAGE__->belongs_to(
+    user => 'TinyBlog::Schema::Users',
+    'user_id',
+);
+
+__PACKAGE__->belongs_to(
+    role => 'TinyBlog::Schema::Roles',
+    'role_id',
+);
+
 1;
