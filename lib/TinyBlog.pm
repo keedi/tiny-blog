@@ -16,7 +16,17 @@ use Catalyst::Runtime '5.70';
 use parent qw/Catalyst/;
 use Catalyst qw/-Debug
                 ConfigLoader
-                Static::Simple/;
+                Static::Simple
+
+                Authentication
+                Authorization::Roles
+                Authorization::ACL
+                Session
+                Session::Store::FastMmap
+                Session::State::Cookie
+
+                FillInForm
+                /;
 our $VERSION = '0.01';
 
 # Configure the application. 
@@ -28,10 +38,36 @@ our $VERSION = '0.01';
 # with a external configuration file acting as an override for
 # local deployment.
 
-__PACKAGE__->config( name => 'TinyBlog' );
+__PACKAGE__->config(
+    name    => 'TinyBlog',
+    session => {
+        flash_to_stash => 1,
+    },
+);
 
 # Start the application
 __PACKAGE__->setup();
+
+# ACL Rule
+__PACKAGE__->deny_access_unless(
+    "/create",
+    [ qw/writer/ ],
+);
+
+__PACKAGE__->deny_access_unless(
+    "/id/id_view",
+    [ qw/writer/ ],
+);
+
+__PACKAGE__->deny_access_unless(
+    "/id/id_edit",
+    [ qw/writer/ ],
+);
+
+__PACKAGE__->deny_access_unless(
+    "/id/id_delete",
+    [ qw/writer admin/ ],
+);
 
 
 =head1 NAME
