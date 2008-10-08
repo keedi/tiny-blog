@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components(qw/PK::Auto Core/);
+__PACKAGE__->load_components(qw/PK::Auto +TinyBlog::DBIC::AutoStoreDateTime Core/);
 __PACKAGE__->table("replies");
 __PACKAGE__->add_columns(
   "id",
