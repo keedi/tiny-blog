@@ -21,4 +21,15 @@ __PACKAGE__->set_primary_key("post_id", "tag_id");
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
+
+__PACKAGE__->belongs_to(
+    post => 'TinyBlog::Schema::Posts',
+    'post_id',
+);
+
+__PACKAGE__->belongs_to(
+    tag => 'TinyBlog::Schema::Tags',
+    'tag_id',
+);
+
 1;
