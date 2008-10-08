@@ -1,3 +1,11 @@
 <!-- BEGIN site/footer -->
-<div id="copyright">&copy; [% site.copyright %]</div>
+<div id="copyright">
+  &copy; [% site.copyright %],
+  [% c.config.name %] is proudly powered by
+  <a href="http://www.catalystframework.org/">Catalyst</a>
+  <br/>
+  <a href="[% c.uri_for('/rss/posts') %]">Entries (RSS)</a>
+  and
+  <a href="[% c.uri_for('/rss/comments') %]">Comments (RSS)</a>
+</div>
 <!-- END site/footer -->

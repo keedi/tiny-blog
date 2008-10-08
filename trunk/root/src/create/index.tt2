@@ -1,0 +1,28 @@
+[% META title = '글 쓰기' %]
+<h2>글 쓰기</h2>
+
+<p>
+<!-- 글 쓰기 양식 -->
+  <form method="post" action="[% c.uri_for('/create') %]">
+    <table>
+      <tr>
+        <th>제목:</th>
+        <td><input type="text" name="title" size="40" /></td>
+      </tr>
+      <tr>
+        <th>꼬리표:</th>
+        <td><input type="text" name="tags" size="40" /> (꼬리표는 쉼표로 구분합니다.)</td>
+      </tr>
+      <tr>
+        <th>글 내용:</th>
+        <td><textarea name="contents" rows="10" cols="38"></textarea></td>
+      </tr>
+      <tr>
+      </tr>
+      <tr>
+        <th></th>
+        <td><input type="submit" name="submit" value="글 쓰기" /></td>
+      </tr>
+    </table>
+  </form>
+</p>

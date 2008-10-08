@@ -1,0 +1,16 @@
+<div class="posts_toc">
+  <div class="tags">
+    <p>
+      꼬리표: 
+      [% FOREACH tag IN tags %]
+        <a href="[% c.uri_for("/tags", tag) | html %]">[% tag | html %]</a>
+      [% END %]
+    </p>
+  </div>
+
+  <ul>
+    [% FOREACH post = posts -%]
+    <li><a href="[% c.uri_for("/id", post.id) | html %]">[% post.title | html %] - by [% post.author | html %]</a></li>
+    [% END -%]
+  </ul>
+</div>

@@ -1,0 +1,36 @@
+[% FOREACH post IN posts %]
+<div class="post">
+  <h2><a href="[% c.uri_for("/id", post.id) | html %]">[% post.title | html %]</a></h2>
+
+  <div class="meta">
+    <div class="tags">
+      <p>
+        꼬리표: 
+        [% FOREACH tag IN post.tags %]
+          <a href="[% c.uri_for("/tags", tag.name) | html %]">[% tag.name | html %]</a>
+        [% END %]
+      </p>
+    </div>
+    <p>
+      작성: [% post.created_on | html %]
+    </p>
+    <p>
+      갱신: [% post.updated_on | html %]
+    </p>
+    <p>
+      글쓴이: [% post.author | html %]
+    </p>
+    [% IF c.user_exists %]
+      [% IF c.user.username == 'admin' OR c.user.username == post.author %]
+        <p>
+          <a href="[% c.uri_for('/id', post.id, 'edit') | html %]">고치기</a>
+        </p>
+      [% END %]
+    [% END %]
+  </div>
+
+  <div class="post_content">
+    [% post.contents | markdown %]
+  </div>
+</div>
+[% END %]

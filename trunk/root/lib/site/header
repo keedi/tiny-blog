@@ -1,3 +1,26 @@
 <!-- BEGIN site/header -->
-<h1 class="title">[% template.title or site.title %]</h1>
+<div id="headerimg">
+  <h1 class="title"><a href="[% c.uri_for('/') %]">[% c.config.title %]</a></h1>
+  <div class="description">[% c.config.description %]</div>
+</div>
+
+[%
+  items = [];
+  IF c.user_exists;
+    items = c.config.navigation.login.items;
+  ELSE;
+    items = c.config.navigation.logout.items;
+  END
+-%]
+<div id="navigation">
+  <ul>
+[% FOREACH item IN items -%]
+[% IF item.link == "/$c.request.path_info" -%]
+    <li> <a href="[% item.link %]" class="selected">[% item.text %]</a> </li>
+[% ELSE -%]
+    <li> <a href="[% item.link %]">[% item.text %]</a> </li>
+[% END -%]
+[% END -%]
+  </ul>
+</div>
 <!-- END site/header -->

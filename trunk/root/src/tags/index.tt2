@@ -1,0 +1,4 @@
+[% META title = '꼬리표:' %]
+
+[% INCLUDE site/posts_toc %]
+[% INCLUDE site/posts %]

@@ -19,18 +19,29 @@ Catalyst Controller.
 
 =head2 index 
 
+최근 글을 보여줍니다.
+
 =cut
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->response->body('Matched TinyBlog::Controller::Recent in Recent.');
+    my $posts_rs = $c->model('DB::Posts')->search(
+        undef,
+        {
+            page     => 1,
+            rows     => $c->config->{recent},
+            order_by => 'created_on DESC',
+        },
+    );
+
+    $c->stash->{posts} = [ $posts_rs->all ];
 }
 
 
 =head1 AUTHOR
 
-Keedi Kim,,,
+Mooninchul,,,
 
 =head1 LICENSE
 
