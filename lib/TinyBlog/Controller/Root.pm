@@ -24,33 +24,56 @@ TinyBlog::Controller::Root - Root Controller for TinyBlog
 
 =head2 index
 
+/recent 페이지를 이용해서 첫화면을 표시
+
 =cut
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    # Hello World
-    $c->response->body( $c->welcome_message );
+    $c->forward('/recent/index');
+    $c->stash->{title}    = $c->config->{description};
+    $c->stash->{template} = 'recent/index.tt2';
 }
+
+=head2 default
+
+404 not found 에러 페이지 출력
+
+=cut
 
 sub default :Path {
     my ( $self, $c ) = @_;
-    $c->response->body( 'Page not found' );
     $c->response->status(404);
-    
+    $c->stash->{error_msg} = '404 Page not found';
+    $c->stash->{template}  = 'not_found.tt2';
 }
 
 =head2 end
 
 Attempt to render a view, if needed.
+폼 자동 채움
 
 =cut 
 
-sub end : ActionClass('RenderView') {}
+sub end :Private {
+    my ( $self, $c ) = @_;
+    $c->forward('render');
+    $c->fillform;
+}
+
+=head2 render
+
+뷰를 자동으로 처리
+
+=cut 
+
+sub render : ActionClass('RenderView') {}
+
 
 =head1 AUTHOR
 
-Keedi Kim,,,
+Mooninchul,,,
 
 =head1 LICENSE
 

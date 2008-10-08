@@ -13,9 +13,27 @@
    site.col = {
       page    = site.rgb.white
       text    = site.rgb.grey1
-      head    = site.rgb.grey3
-      line    = site.rgb.orange
+      head    = site.rgb.white
+      line    = site.rgb.blue
       message = site.rgb.green
       error   = site.rgb.red
+
+      head_text = site.rgb.white
+      head_desc = site.rgb.black
+
+      navi_fg       = site.rgb.black
+      navi_fg_over  = site.rgb.orange
+      navi_bg_over  = site.rgb.grey3
+      navi_selected = site.rgb.orange
+
+      meta = site.rgb.grey1
+
+      tag_fg      = site.rgb.black
+      tag_bg      = site.rgb.grey3
+      tag_fg_over = site.rgb.orange
+      tag_bg_over = site.rgb.white
+
+      post_title      = site.rgb.grey1
+      post_title_over = site.rgb.orange
    };
 %]

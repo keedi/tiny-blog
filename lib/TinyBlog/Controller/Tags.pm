@@ -21,16 +21,34 @@ Catalyst Controller.
 
 =cut
 
-sub index :Path :Args(0) {
-    my ( $self, $c ) = @_;
+sub index :Path :Args {
+    my ( $self, $c, @tags ) = @_;
 
-    $c->response->body('Matched TinyBlog::Controller::Tags in Tags.');
+    if ( @tags ) {
+        # 특정 태그 검색
+        my $tag = $c->model('DB::Tags')->find( { name => [ @tags ] } );
+
+        $c->stash->{title} = '꼬리표: ' . join(' & ', @tags);
+        $c->stash->{tags}  = [ @tags ];
+        $c->stash->{posts} = [ $tag->posts ] if $tag;
+    }
+    else {
+        # 모든 태그 얻기
+        my $tag_rs = $c->model('DB::Tags')->search(
+            undef,
+            {
+                order_by => 'name ASC',
+            },
+        );
+        my @tags = map { $_->name } $tag_rs->all;
+        $c->stash->{tags} = [ @tags ];
+    }
 }
 
 
 =head1 AUTHOR
 
-Keedi Kim,,,
+Mooninchul,,,
 
 =head1 LICENSE
 

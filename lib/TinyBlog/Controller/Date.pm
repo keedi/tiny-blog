@@ -24,13 +24,13 @@ Catalyst Controller.
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->response->body('Matched TinyBlog::Controller::Date in Date.');
+    #$c->response->body('Matched TinyBlog::Controller::Date in Date.');
 }
 
 
 =head1 AUTHOR
 
-Keedi Kim,,,
+Mooninchul,,,
 
 =head1 LICENSE
 

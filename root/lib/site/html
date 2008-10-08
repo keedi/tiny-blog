@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
  <head>
-  <title>[% template.title or site.title %]</title>
+  <title>[[% c.config.title %]] [% title or template.title or site.title %]</title>
   <style type="text/css">
 [% PROCESS ttsite.css %]
   </style>
