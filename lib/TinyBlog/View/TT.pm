@@ -28,7 +28,7 @@ Catalyst TTSite View.
 
 =head1 AUTHOR
 
-Mooninchul,,,
+Keedi Kim,,,
 
 =head1 LICENSE
 

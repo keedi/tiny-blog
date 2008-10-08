@@ -52,7 +52,7 @@ L<TinyBlog::Controller::Root>, L<Catalyst>
 
 =head1 AUTHOR
 
-Mooninchul,,,
+Keedi Kim,,,
 
 =head1 LICENSE
 
