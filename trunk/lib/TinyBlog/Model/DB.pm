@@ -24,7 +24,7 @@ L<Catalyst::Model::DBIC::Schema> Model using schema L<TinyBlog::Schema>
 
 =head1 AUTHOR
 
-Mooninchul,,,
+Keedi Kim,,,
 
 =head1 LICENSE
 
