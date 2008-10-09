@@ -17,3 +17,7 @@ CREATE TABLE user_roles (
     role_id     INTEGER,
     PRIMARY KEY ( user_id, role_id )
 );
+
+INSERT INTO roles VALUES ( 1, 'reader' );
+INSERT INTO roles VALUES ( 2, 'writer' );
+INSERT INTO roles VALUES ( 3, 'admin' );
