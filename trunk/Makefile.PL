@@ -15,17 +15,17 @@ requires 'Config::General'; # This should reflect the config file format you've 
 
 requires 'Catalyst::View::TT';
 requires 'Catalyst::Plugin::Authentication';
-requires 'Catalyst::Plugin::Authorization::Roles';
-requires 'Catalyst::Plugin::Authorization::ACL';
 requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::Session::Store::FastMmap';
 requires 'Catalyst::Plugin::Session::State::Cookie';
-requires 'Path::Class';
-requires 'Config::General';
+requires 'Catalyst::Plugin::Authorization::Roles';
+requires 'Catalyst::Plugin::Authorization::ACL';
 requires 'Text::MultiMarkdown';
 requires 'DateTime';
 requires 'HTML::FillInForm';
 requires 'Catalyst::Plugin::FillInForm';
+requires 'DBIx::Class';
+requires 'Catalyst::Model::DBIC::Schema';
 
 catalyst;
 
