@@ -11,7 +11,7 @@
       </tr>
       <tr>
         <th>꼬리표:</th>
-        <td><input type="text" name="tags" size="40" /> (꼬리표는 쉼표로 구분합니다.)</td>
+        <td><input type="text" name="tags" size="40" /> (쉼표로 구분)</td>
       </tr>
       <tr>
         <th>글 내용:</th>
