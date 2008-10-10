@@ -49,11 +49,6 @@ sub id_view :PathPart('id') :Chained('/') :CaptureArgs(1) {
 
     $c->stash->{post} = $post;
     $c->stash->{id}   = $id;
-
-    $c->detach('access_denied')
-        unless $c->user->username eq $post->author
-            || $c->check_any_user_role('admin');
-
 }
 
 =head2 id_edit
@@ -64,6 +59,10 @@ sub id_view :PathPart('id') :Chained('/') :CaptureArgs(1) {
 
 sub id_edit :PathPart('edit') :Chained('id_view') :Args(0) {
     my ( $self, $c ) = @_;
+
+    $c->forward('/user/check', [ 'edit' ]);
+    $c->detach('access_denied')
+        unless $c->stash->{return};
 
     my $post = $c->stash->{post};
     my $id   = $c->stash->{id};
@@ -103,6 +102,10 @@ sub id_edit :PathPart('edit') :Chained('id_view') :Args(0) {
 
 sub id_delete :PathPart('delete') :Chained('id_view') :Args(0) {
     my ( $self, $c ) = @_;
+
+    $c->forward('/user/check', [ 'delete' ]);
+    $c->detach('access_denied')
+        unless $c->stash->{return};
 
     my $post = $c->stash->{post};
     my $id   = $c->stash->{id};

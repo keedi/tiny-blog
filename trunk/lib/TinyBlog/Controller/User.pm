@@ -73,6 +73,39 @@ sub logout :Local {
     }
 }
 
+=head2 check
+
+권한 체크
+
+=cut
+
+sub check :Private {
+    my ( $self, $c ) = @_;
+
+    my $rule = $c->request->args->[0];
+
+    $c->stash->{return} = 0;
+    if ( $rule eq 'create' ) {
+        $c->stash->{return} = 1
+            if     $c->user_exists
+                && $c->check_any_user_role('writer');
+    }
+    if ( $rule eq 'edit' ) {
+        $c->stash->{return} = 1
+            if     $c->user_exists
+                && $c->check_any_user_role('writer')
+                && (
+                       $c->user->username eq $c->stash->{post}->author
+                    || $c->check_any_user_role('admin')
+                );
+    }
+    if ( $rule eq 'delete' ) {
+        $c->stash->{return} = 1
+            if     $c->user_exists
+                && $c->check_any_user_role('admin');
+    }
+}
+
 
 =head1 AUTHOR
 
