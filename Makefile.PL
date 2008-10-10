@@ -20,7 +20,6 @@ requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::Session::Store::FastMmap';
 requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::Plugin::Authorization::Roles';
-requires 'Catalyst::Plugin::Authorization::ACL';
 requires 'Text::MultiMarkdown';
 requires 'DateTime';
 requires 'HTML::FillInForm';

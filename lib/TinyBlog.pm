@@ -20,7 +20,6 @@ use Catalyst qw/-Debug
 
                 Authentication
                 Authorization::Roles
-                Authorization::ACL
                 Session
                 Session::Store::FastMmap
                 Session::State::Cookie
@@ -47,27 +46,6 @@ __PACKAGE__->config(
 
 # Start the application
 __PACKAGE__->setup();
-
-# ACL Rule
-__PACKAGE__->deny_access_unless(
-    "/create",
-    [ qw/writer/ ],
-);
-
-__PACKAGE__->deny_access_unless(
-    "/id/id_view",
-    [ qw/writer/ ],
-);
-
-__PACKAGE__->deny_access_unless(
-    "/id/id_edit",
-    [ qw/writer/ ],
-);
-
-__PACKAGE__->deny_access_unless(
-    "/id/id_delete",
-    [ qw/writer admin/ ],
-);
 
 
 =head1 NAME
