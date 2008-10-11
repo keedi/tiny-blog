@@ -10,12 +10,12 @@ use lib dir($Bin, '..', 'lib')->stringify;
 use Config::General 'ParseConfig';
 use DateTime;
 
-my $conf = { ParseConfig(file($Bin, '..', 'tinyblog.conf')) };
+my $config = { ParseConfig(file($Bin, '..', 'tinyblog.conf')) };
 
 sub insert {
     my $self = shift;
 
-    my $dt       = DateTime->now( time_zone => $conf->{timezone} );
+    my $dt       = DateTime->now( time_zone => $config->{timezone} );
     my $date_str = $dt->ymd . ' ' . $dt->hms;
 
     $self->created_on( $date_str )
@@ -28,7 +28,7 @@ sub insert {
 sub update {
     my $self = shift;
 
-    my $dt = DateTime->now( time_zone => $conf->{timezone} );
+    my $dt = DateTime->now( time_zone => $config->{timezone} );
     my $date_str = $dt->ymd . ' ' . $dt->hms;
 
     $self->updated_on( $date_str )
