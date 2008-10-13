@@ -26,22 +26,13 @@ sub index :Path :Args {
 
     if ( @tags ) {
         # 특정 태그 검색
-        my $tag = $c->model('DB::Tags')->find( { name => [ @tags ] } );
-
         $c->stash->{title} = '꼬리표: ' . join(' & ', @tags);
-        $c->stash->{tags}  = [ @tags ];
-        $c->stash->{posts} = [ $tag->posts ] if $tag;
+        $c->stash->{tags}  = [ sort @tags ];
+        $c->stash->{posts} = [ $c->model('DB')->get_posts_from_tags(@tags) ];
     }
     else {
         # 모든 태그 얻기
-        my $tag_rs = $c->model('DB::Tags')->search(
-            undef,
-            {
-                order_by => 'name ASC',
-            },
-        );
-        my @tags = map { $_->name } $tag_rs->all;
-        $c->stash->{tags} = [ @tags ];
+        $c->stash->{tags} = [ map { $_->name } $c->model('DB')->get_tags ];
     }
 }
 
