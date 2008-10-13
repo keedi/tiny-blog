@@ -9,7 +9,10 @@ use Text::MultiMarkdown;
     sub Text::MultiMarkdown::_GenerateHeader {
         my ($self, $level, $id) = @_;
 
-        $level += ($self->{params}->{start_level} - 1);
+        my $start_level = $self->{params}->{start_level};
+        $start_level ||= 1;
+        $level += ($start_level - 1);
+
         return "<h$level>"  .  $self->_RunSpanGamut($id)  .  "</h$level>\n\n";
     }
 }
