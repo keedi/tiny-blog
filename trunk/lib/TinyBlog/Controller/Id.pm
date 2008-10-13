@@ -4,6 +4,14 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 
+use Text::MultiMarkdown;
+my $m = Text::MultiMarkdown->new(
+    tab_width     => 2,
+    use_wikilinks => 0,
+    start_level   => 3,
+);
+
+
 =head1 NAME
 
 TinyBlog::Controller::Id - Catalyst Controller
@@ -49,6 +57,65 @@ sub id_view :PathPart('id') :Chained('/') :CaptureArgs(1) {
 
     $c->stash->{post} = $post;
     $c->stash->{id}   = $id;
+}
+
+=head2 id_print
+
+/id/*/print 체인액션 처리
+
+=cut
+
+sub id_print :PathPart('print') :Chained('id_view') :Args(0) {
+    my ( $self, $c ) = @_;
+
+    my $post = $c->stash->{post};
+    my $id   = $c->stash->{id};
+
+    $c->response->body(<<"END_PRINT"
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+  <title>[@{[$c->config->{title}]}] @{[$post->title]}</title>
+</head>
+
+<body>
+  <div id="page">
+
+    <div id="header">
+      <h1 class="title">@{[$c->config->{title}]}</h1>
+      <div class="description">@{[$c->config->{description}]}</div>
+    </div>
+
+    <div id="content">
+      
+      <div class="post">
+        <h2>@{[$post->title]}</h2>
+        <div class="meta">
+          <div class="tags">
+            <p> 꼬리표: 
+              @{[ join(', ', map { '<a href="'.$c->uri_for('/tags/').$_->name.'">'.$_->name.'</a>' } $post->tags) ]}
+            </p>
+          </div>
+          <p> 작성: @{[$post->created_on]} </p>
+          <p> 갱신: @{[$post->updated_on]} </p>
+          <p> 글쓴이: @{[$post->author]} </p>
+        </div>
+
+        <hr />
+
+        <div class="post_content">
+          @{[ $m->markdown($post->contents) ]}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+ </body>
+</html>
+END_PRINT
+    );
 }
 
 =head2 id_edit
