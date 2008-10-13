@@ -26,16 +26,7 @@ Catalyst Controller.
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    my $posts_rs = $c->model('DB::Posts')->search(
-        undef,
-        {
-            page     => 1,
-            rows     => $c->config->{recent},
-            order_by => 'created_on DESC',
-        },
-    );
-
-    $c->stash->{posts} = [ $posts_rs->all ];
+    $c->stash->{posts} = [ $c->model('DB')->get_recent_posts ];
 }
 
 
