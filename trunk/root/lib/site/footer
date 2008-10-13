@@ -4,8 +4,8 @@
   [% c.config.name %] is proudly powered by
   <a href="http://www.catalystframework.org/">Catalyst</a>
   <br/>
-  <a href="[% c.uri_for('/rss/posts') %]">Entries (RSS)</a>
+  <a href="[% c.uri_for('/feeds/posts') %]">Entries (RSS)</a>
   and
-  <a href="[% c.uri_for('/rss/comments') %]">Comments (RSS)</a>
+  <a href="[% c.uri_for('/feeds/comments') %]">Comments (RSS)</a>
 </div>
 <!-- END site/footer -->
