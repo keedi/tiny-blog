@@ -1,4 +1,4 @@
-package TinyBlog::Controller::RSS;
+package TinyBlog::Controller::Feeds;
 
 use strict;
 use warnings;
@@ -6,7 +6,7 @@ use parent 'Catalyst::Controller';
 
 =head1 NAME
 
-TinyBlog::Controller::RSS - Catalyst Controller
+TinyBlog::Controller::Feeds - Catalyst Controller
 
 =head1 DESCRIPTION
 
@@ -24,7 +24,7 @@ Catalyst Controller.
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->response->body('Matched TinyBlog::Controller::RSS in RSS.');
+    $c->response->body('Matched TinyBlog::Controller::Feeds in Feeds.');
 }
 
 
