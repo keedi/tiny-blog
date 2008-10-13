@@ -26,6 +26,7 @@ requires 'HTML::FillInForm';
 requires 'Catalyst::Plugin::FillInForm';
 requires 'DBIx::Class';
 requires 'Catalyst::Model::DBIC::Schema';
+requires 'XML::Feed';
 
 catalyst;
 
