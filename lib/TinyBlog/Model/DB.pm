@@ -11,6 +11,13 @@ __PACKAGE__->config(
     ],
 );
 
+use FindBin qw($Bin);
+use Path::Class;
+use lib dir($Bin, '..', 'lib')->stringify;
+
+use Config::General 'ParseConfig';
+my $config = { ParseConfig(file($Bin, '..', 'tinyblog.conf')) };
+
 =head1 NAME
 
 TinyBlog::Model::DB - Catalyst DBIC Schema Model
@@ -21,6 +28,31 @@ See L<TinyBlog>
 =head1 DESCRIPTION
 
 L<Catalyst::Model::DBIC::Schema> Model using schema L<TinyBlog::Schema>
+
+=head1 METHODS
+
+=cut
+
+
+=head2 hello
+
+=cut
+
+sub get_recent_posts {
+    my $self = shift;
+
+    my $posts_rs = $self->resultset('Posts')->search(
+        undef,
+        {
+            page     => 1,
+            rows     => $config->{recent},
+            order_by => 'created_on DESC',
+        },
+    );
+
+    return $posts_rs->all;
+}
+
 
 =head1 AUTHOR
 
