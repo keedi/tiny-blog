@@ -24,38 +24,50 @@ Catalyst Controller.
 
 =head2 index 
 
-/feeds/rss 로 포워딩
+기본으로 최근 글 피드를 출력한다.
 
 =cut
 
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->forward('atom');
+    $c->forward('posts');
 }
 
-=head2 atom
+=head2 posts
 
-atom 형식의 피드
+최근 글 피드
 
 =cut
 
-sub atom :Local {
-    my ( $self, $c ) = @_;
+sub posts :Local {
+    my ( $self, $c, $feed_type ) = @_;
 
-    $c->stash->{type} = 'Atom';
+    $c->stash->{posts} = [ $c->model('DB')->get_recent_posts ];
 }
 
-=head2 rss
+=head2 comments
 
-rss 형식의 피드
+최근 답글 피드
 
 =cut
 
-sub rss :Local {
-    my ( $self, $c ) = @_;
+sub comments :Local {
+    my ( $self, $c, $feed_type ) = @_;
 
-    $c->stash->{type} = 'RSS';
+    $c->stash->{posts} = [ ];
+}
+
+=head2 tags
+
+특정 태그의 최근 글 피드
+
+=cut
+
+sub tags :Local {
+    my ( $self, $c, @tags ) = @_;
+
+    $c->stash->{posts} = [ $c->model('DB')->get_posts_from_tags(@tags) ];
 }
 
 =head2 end
@@ -67,8 +79,6 @@ sub rss :Local {
 sub end :Private {
     my ( $self, $c ) = @_;
 
-    my @posts_rs = $c->model('DB')->get_recent_posts;
-
     my $feed = XML::Feed->new( $c->stash->{type} );
     $feed->title      ( $c->config->{title}       );
     $feed->description( $c->config->{description} );
@@ -76,13 +86,26 @@ sub end :Private {
     $feed->language   ( $c->config->{language}    );
     $feed->link       ( $c->uri_for('/')          );
 
+    my @posts_rs = $c->stash->{posts} ? @{ $c->stash->{posts} } : ();
     for my $post ( @posts_rs ) {
 
         my $entry = XML::Feed::Entry->new( $c->stash->{type} );
-        $entry->title   ( $post->title                  );
-        $entry->content ( markdown($post->contents)     );
-        $entry->author  ( $post->author                 );
-        $entry->link    ( $c->uri_for('/id/'.$post->id) );
+
+        my $url = $c->uri_for('/id/'.$post->id);
+        my $contents
+            = "<p>"
+            . "<strong>주의</strong>: ["
+            . $post->title
+            . "]의 가장 최근 판은 "
+            . "<a href=$url>이곳</a>에서 확인할 수 있습니다."
+            . "</p>"
+            . markdown( $post->contents )
+            ;
+
+        $entry->title   ( $post->title  );
+        $entry->content ( $contents     );
+        $entry->author  ( $post->author );
+        $entry->link    ( $url          );
 
         # FIXME $self->context 를 사용할 수 없다?
         my $timezone = $c->config->{timezone};
@@ -97,6 +120,8 @@ sub end :Private {
 }
 
 =head2 datetime
+
+날짜 문자열을 이용해서 DateTime 객체 반환
 
 =cut
 
