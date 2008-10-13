@@ -21,10 +21,13 @@ my ( $action, $username ) = @ARGV;
 #
 # DB 접속
 #
-my $config = { ParseConfig(file($Bin, '..', 'tinyblog.conf')) };
-my $HOME   = dir($Bin, '..');
-my $dsn    = $config->{'Model::DB'}->{connect_info};
+my $config       = { ParseConfig(file($Bin, '..', 'tinyblog.conf')) };
+my $HOME         = dir($Bin, '..');
+my $connect_info = $config->{'Model::DB'}->{connect_info};
+
+my $dsn = ref($connect_info) eq 'ARRAY' ? $connect_info->[0] : $connect_info;
 $dsn =~ s/__HOME__/$HOME/;
+
 my $schema = TinyBlog::Schema->connect($dsn)
     or die "Failed to connect to database at $dsn";
 
