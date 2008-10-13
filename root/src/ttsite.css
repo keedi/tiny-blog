@@ -9,7 +9,7 @@ body {
     margin: 0px;
     padding: 0px;
     height: 100%;
-    font-size: 9pt;
+    font-size: 10pt;
     font-family: 'Malgun Gothic', 'Lucida Grande', Verdana, Arial, Sans-Serif;
 }
 
@@ -43,6 +43,7 @@ body {
 
 #navigation {
     float:   right;
+    font-size: 0.9em;
 }
 
 #navigation a, #navigation a:hover, #navigation a:visited {
@@ -132,6 +133,14 @@ h6 {
 
 .post_content {
     margin-left: 10px;
+}
+
+.post_content p {
+    line-height: 1.6em;
+}
+
+.post_content li {
+    line-height: 1.2em;
 }
 
 h1, h1 a, h1 a:hover, h1 a:visited, #headerimg {
