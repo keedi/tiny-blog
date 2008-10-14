@@ -3,14 +3,9 @@ use strict;
 use warnings;
 use base 'DBIx::Class';
 
-use FindBin qw($Bin);
-use Path::Class;
-use lib dir($Bin, '..', 'lib')->stringify;
-
-use Config::General 'ParseConfig';
 use DateTime;
-
-my $config = { ParseConfig(file($Bin, '..', 'tinyblog.conf')) };
+use TinyBlog;
+my $config = TinyBlog->config;
 
 sub insert {
     my $self = shift;
