@@ -86,6 +86,59 @@ sub get_posts_from_tags {
     );  # FIXME 중복 제거
 }
 
+=head2 get_posts_from_date
+
+=cut
+
+sub get_posts_from_date {
+    my ( $self, $year, $month ) = @_;
+
+    return unless $year;
+    return unless !$month || (1 <= $month && $month <= 12);
+
+    my ( $dt1, $dt2 );
+    if ( $year && !$month ) {
+        $dt1 = DateTime->new(
+            year       => $year,
+            time_zone  => $config->{timezone},
+        );
+
+        $dt2 = $dt1->clone;
+        $dt2->add( years => 1 );
+    }
+    elsif ( $year && 1 <= $month && $month <= 12 ) {
+        $dt1 = DateTime->new(
+            year       => $year,
+            month      => $month,
+            time_zone  => $config->{timezone},
+        );
+
+        $dt2 = $dt1->clone;
+        $dt2->add( months => 1 );
+    }
+    else {
+        return;
+    }
+
+    my $datetime1 = $dt1->ymd . ' ' . $dt1->hms;
+    my $datetime2 = $dt2->ymd . ' ' . $dt2->hms;
+
+    my $posts_rs = $self->resultset('Posts')->search(
+        {
+            -and => [
+                'created_on' => { '>=' => $datetime1 },
+                'created_on' => { '<'  => $datetime2 },
+            ],
+        },
+        {
+            order_by => 'created_on DESC',
+        }
+    );
+
+    return unless $posts_rs;
+    return $posts_rs->all;
+}
+
 =head2 get_tags
 
 =cut
