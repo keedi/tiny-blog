@@ -72,6 +72,9 @@ elsif ( $action eq 'edit' ) {
     my $new_value = <STDIN>;
     chomp $new_value;
 
+    $new_value = $new_value == 1 ? 1 : 0           if $field eq 'active';
+    $new_value = Digest::SHA::sha1_hex($new_value) if $field eq 'password';
+
     print "Check...\n";
     printf "Old: %15s: %s\n", $field, $old_value;
     printf "New: %15s: %s\n", $field, $new_value;
@@ -97,7 +100,7 @@ elsif ( $action eq 'edit' ) {
             }
         }
         else {
-            eval "\$user->$field($new_value)";
+            eval "\$user->$field(\$new_value)";
             if ( $@ ) {
                 die "Editing $field field of $username failed: $@";
             }
