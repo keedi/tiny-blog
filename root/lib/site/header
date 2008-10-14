@@ -16,9 +16,9 @@
   <ul>
 [% FOREACH item IN items -%]
 [% IF item.link == "/$c.request.path_info" -%]
-    <li> <a href="[% item.link %]" class="selected">[% item.text %]</a> </li>
+    <li> <a href="[% c.uri_for(item.link) %]" class="selected">[% item.text %]</a> </li>
 [% ELSE -%]
-    <li> <a href="[% item.link %]">[% item.text %]</a> </li>
+    <li> <a href="[% c.uri_for(item.link) %]">[% item.text %]</a> </li>
 [% END -%]
 [% END -%]
   </ul>
