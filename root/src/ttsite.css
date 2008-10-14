@@ -22,7 +22,7 @@ body {
 }
 
 #header {
-    background: #73a0c5 url('static/images/top_banner.jpg') no-repeat bottom center;
+    background: #73a0c5 url('[% c.uri_for("/static/images/top_banner.jpg") %]') no-repeat bottom center;
     background-color: [% site.col.head %];
     border-top:   1px solid [% site.col.line %];
     border-left:  1px solid [% site.col.line %];
