@@ -14,6 +14,7 @@ requires 'Config::General'; # This should reflect the config file format you've 
                  # See Catalyst::Plugin::ConfigLoader for supported formats
 
 requires 'Catalyst::View::TT';
+requires 'Catalyst::Model::DBIC::Schema';
 requires 'Catalyst::Plugin::Authentication';
 requires 'Catalyst::Authentication::Store::DBIx::Class';
 requires 'Catalyst::Plugin::Session';
@@ -25,7 +26,7 @@ requires 'DateTime';
 requires 'HTML::FillInForm';
 requires 'Catalyst::Plugin::FillInForm';
 requires 'DBIx::Class';
-requires 'Catalyst::Model::DBIC::Schema';
+requires 'Digest::SHA';
 requires 'XML::Feed';
 
 catalyst;
