@@ -1,2 +1,4 @@
 [% META title = '날짜 별 저장소' %]
-<h2>날짜 별 저장소</h2>
+
+[% INCLUDE site/posts_toc %]
+[% INCLUDE site/posts %]

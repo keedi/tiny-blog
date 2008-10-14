@@ -1,12 +1,23 @@
 <div class="posts_toc">
-  <div class="tags">
-    <p>
-      꼬리표: 
-      [% FOREACH tag IN tags %]
-        <a href="[% c.uri_for("/tags", tag) | html %]">[% tag | html %]</a>
-      [% END %]
-    </p>
-  </div>
+  [% IF tags %]
+    <div class="tags">
+      <p>
+        꼬리표: 
+        [% FOREACH tag IN tags %]
+          <a href="[% c.uri_for("/tags", tag) | html %]">[% tag | html %]</a>
+        [% END %]
+      </p>
+    </div>
+  [% END %]
+
+  [% IF date %]
+    <div class="tags">
+      <p>
+        저장소: 
+        <a href="[% c.uri_for("/date", date.year, date.month) | html %]">[% date.str | html %]</a>
+      </p>
+    </div>
+  [% END %]
 
   <ul>
     [% FOREACH post = posts -%]
