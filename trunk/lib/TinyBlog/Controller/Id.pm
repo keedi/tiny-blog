@@ -82,35 +82,40 @@ sub id_print :PathPart('print') :Chained('id_view') :Args(0) {
 <body>
   <div id="page">
 
-    <div id="header">
+    <div id="header" style="float:right">
       <h1 class="title">@{[$c->config->{title}]}</h1>
       <div class="description">@{[$c->config->{description}]}</div>
     </div>
 
-    <div id="content">
-      
+    <hr />
+
+    <div id="content" style="line-height: 1.6em">
+
       <div class="post">
         <h2>@{[$post->title]}</h2>
+
+        <div class="post_content">
+          @{[ $m->markdown($post->contents) ]}
+        </div>
+
+        <hr />
+
         <div class="meta">
           <div class="tags">
             <p> 꼬리표: 
               @{[ join(', ', map { '<a href="'.$c->uri_for('/tags/').$_->name.'">'.$_->name.'</a>' } $post->tags) ]}
             </p>
           </div>
-          <p> 작성: @{[$post->created_on]} </p>
-          <p> 갱신: @{[$post->updated_on]} </p>
-          <p> 글쓴이: @{[$post->author]} </p>
-        </div>
+          <p>
+            글쓴이: @{[$post->author]},
+            작성: @{[$post->created_on]},
+            갱신: @{[$post->updated_on]}
+          </p>
+        </div> <!-- end meta    -->
+      </div>   <!-- end post    -->
 
-        <hr />
-
-        <div class="post_content">
-          @{[ $m->markdown($post->contents) ]}
-        </div>
-      </div>
-
-    </div>
-  </div>
+    </div>     <!-- end content -->
+  </div>       <!-- end page    -->
 
  </body>
 </html>
