@@ -15,8 +15,8 @@ use TinyBlog::Schema;
 # 명령행 인자 처리
 #
 die usage()
-    unless @ARGV >= 2;
-my ( $action, $username, @argv ) = @ARGV;
+    unless @ARGV >= 1;
+my ( $action, @argv ) = @ARGV;
 
 #
 # DB 접속
@@ -32,14 +32,36 @@ my $schema = TinyBlog::Schema->connect($dsn)
     or die "Failed to connect to database at $dsn";
 
 #
-# view, add, del 동작 처리
+# list, view, add, edit, del 동작 처리
 #
-if ( $action eq 'view' ) {
+if ( $action eq 'list' ) {
+    my @users = $schema->resultset('Users')->search;
+
+    for my $user ( @users ) {
+        my %param_of = (
+            username => $user->username,
+            password => $user->password,
+            nick     => $user->nick,
+            email    => $user->email,
+            active   => $user->active,
+            roles    => join(', ', map { $_->role } $user->roles),
+        );
+
+        printf "%15s: %s\n", $_, $param_of{$_}
+            for qw/ username password nick email active roles /;
+        print "\n";
+    }
+}
+elsif ( $action eq 'view' ) {
+    my $username = shift @argv;
+    die usage() unless $username;
+
     my $user = $schema->resultset('Users')->find( { username => $username } )
         or die "Cannot find [$username]";
 
     my %param_of = (
         username => $user->username,
+        password => $user->password,
         nick     => $user->nick,
         email    => $user->email,
         active   => $user->active,
@@ -50,11 +72,11 @@ if ( $action eq 'view' ) {
         for qw/ username nick email active roles /;
 }
 elsif ( $action eq 'edit' ) {
+    my ( $username, $field ) = @argv;
+    die usage() unless $username && $field;
+
     my $user = $schema->resultset('Users')->find( { username => $username } )
         or die "Cannot find [$username]";
-
-    my $field = shift @argv;
-    die usage() unless $field;
 
     my $old_value;
     if ( $field eq 'roles' ) {
@@ -112,6 +134,9 @@ elsif ( $action eq 'edit' ) {
     }
 }
 elsif ( $action eq 'add' ) {
+    my $username = shift @argv;
+    die usage() unless $username;
+
     my $user = $schema->resultset('Users')->find( { username => $username } )
         and die "Already exists [$username]";
 
@@ -163,6 +188,9 @@ elsif ( $action eq 'add' ) {
     }
 }
 elsif ( $action eq 'del' ) {
+    my $username = shift @argv;
+    die usage() unless $username;
+
     my $user = $schema->resultset('Users')->find( { username => $username } )
         or die "Cannot find [$username]";
 
@@ -196,6 +224,6 @@ sub usage {
     return <<"END_USAGE";
 Usage: $0 <action> <username> [ <arg1> ... ]
 
-action: view, add, del, edit
+action: list, view, add, del, edit
 END_USAGE
 }
