@@ -69,7 +69,7 @@ elsif ( $action eq 'view' ) {
     );
 
     printf "%15s: %s\n", $_, $param_of{$_}
-        for qw/ username nick email active roles /;
+        for qw/ username password nick email active roles /;
 }
 elsif ( $action eq 'edit' ) {
     my ( $username, $field ) = @argv;
@@ -108,7 +108,20 @@ elsif ( $action eq 'edit' ) {
     if ( $confirm =~ /^yes$/i ) {
 
         if ( $field eq 'roles' ) {
-            my @role_names = map { s/^\s+//; s/\s+$//; $_ } split /,/, $new_value;
+            my @role_names = map { s/^\s+//; s/\s+$//; $_ } split /,/, $old_value;
+            for my $role_name ( @role_names ) {
+
+                my $role = $schema->resultset('Roles')->find({ role => $role_name });
+                next unless $role;
+
+                my $user_role = $schema->resultset('UserRoles')->find( {
+                    user_id => $user->id,
+                    role_id => $role->id,
+                } );
+                $user_role->delete;
+            }
+
+            @role_names = map { s/^\s+//; s/\s+$//; $_ } split /,/, $new_value;
             for my $role_name ( @role_names ) {
 
                 my $role = $schema->resultset('Roles')->find({ role => $role_name });
