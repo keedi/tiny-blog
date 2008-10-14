@@ -50,6 +50,7 @@ __PACKAGE__->has_many(
 __PACKAGE__->many_to_many(
     tags => 'post_tags',
     'tag',
+    { order_by => 'name ASC', },
 );
 
 1;
