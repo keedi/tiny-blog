@@ -28,6 +28,7 @@ requires 'Catalyst::Plugin::FillInForm';
 requires 'DBIx::Class';
 requires 'Digest::SHA';
 requires 'XML::Feed';
+requires 'HTML::TreeBuilder';
 
 catalyst;
 
