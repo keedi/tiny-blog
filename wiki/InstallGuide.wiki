@@ -1,4 +1,4 @@
-#TinyBlog Install Guide
+_TinyBlog Install Guide_
 
 = 서론 =
 
