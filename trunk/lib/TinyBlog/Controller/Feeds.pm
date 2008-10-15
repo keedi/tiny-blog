@@ -7,6 +7,49 @@ use parent 'Catalyst::Controller';
 use XML::Feed;
 use DateTime;
 use Text::MultiMarkdown 'markdown';
+use Encode 'decode';
+use HTML::TreeBuilder;
+
+#
+# idea stolen from http://www.cpanforum.com/threads/657
+#
+sub HTML::Element::as_text_with_space {
+    # STh: a special version of as_text
+    #that tries to keep the outline structure
+    my ( $this, %options ) = @_;
+    my $skip_dels = $options{'skip_dels'} || 0;
+
+    #print "Skip dels: $skip_dels\n";
+    my (@pile) = ($this);
+    my $tag;
+    my $text = '';
+    while (@pile) {
+        if ( !defined( $pile[0] ) ) {    # undef!
+            # no-op
+        }
+        elsif ( !ref( $pile[0] ) ) {     # text bit! save it!
+
+            # $text .= "\n{$tag}" if $HTML::Element::canTighten{$tag};
+            # $text .= "\n[$tag]" unless $HTML::Element::canTighten{$tag};
+            $text .= ' '.shift @pile;
+        }
+        else {                           # it's a ref -- traverse under it
+            unshift @pile, @{ $this->{'_content'} || [] }
+                unless ( $tag = ( $this = shift @pile )->{'_tag'} ) eq 'style'
+                or $tag eq 'script'
+                or ( $skip_dels and $tag eq 'del' );
+
+            # $text .= "\n{+$tag}" if $HTML::Element::canTighten{$tag};
+            # $text .= "\n[+$tag]" unless $HTML::Element::canTighten{$tag};
+            $text .= "\n\n" if $HTML::Element::canTighten{$tag};
+        }
+    }
+    $text =~ s/^\n+//;        # remove all leading \n
+    $text =~ s/\n+$//;        # remove all trailing \n
+    $text =~ s/\n\n\n/\n\n/g; # collapse multi \n to a maximum
+                              # of double \n
+    return $text;
+}
 
 
 =head1 NAME
@@ -101,8 +144,20 @@ sub end :Private {
             . "</p>"
             . markdown( $post->contents )
             ;
+        my $tree = HTML::TreeBuilder->new;
+        $tree->parse_content($contents);
+        my $utf8_contents = decode('utf-8', $tree->as_text_with_space);
+        my $summary_length = $c->config->{summary_length} || 100;
+        my $summary;
+        if ( length($utf8_contents) > $summary_length ) {
+            $summary = substr($utf8_contents, 0, $summary_length) . '...';
+        }
+        else {
+            $summary = $utf8_contents;
+        }
 
         $entry->title   ( $post->title  );
+        $entry->summary ( $summary      );
         $entry->content ( $contents     );
         $entry->author  ( $post->author );
         $entry->link    ( $url          );
