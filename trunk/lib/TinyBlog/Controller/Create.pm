@@ -26,9 +26,8 @@ Catalyst Controller.
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->forward('/user/check', [ 'create' ]);
     $c->detach('access_denied')
-        unless $c->stash->{return};
+        unless $c->forward('/user/check', [ 'create' ]);
 
     my $title    = $c->request->params->{title}    || q{};
     my $tag      = $c->request->params->{tags}     || q{};
