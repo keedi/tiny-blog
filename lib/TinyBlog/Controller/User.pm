@@ -84,14 +84,13 @@ sub check :Private {
 
     my $rule = $c->request->args->[0];
 
-    $c->stash->{return} = 0;
     if ( $rule eq 'create' ) {
-        $c->stash->{return} = 1
+        return 1
             if     $c->user_exists
                 && $c->check_any_user_role('writer');
     }
     if ( $rule eq 'edit' ) {
-        $c->stash->{return} = 1
+        return 1
             if     $c->user_exists
                 && $c->check_any_user_role('writer')
                 && (
@@ -100,10 +99,12 @@ sub check :Private {
                 );
     }
     if ( $rule eq 'delete' ) {
-        $c->stash->{return} = 1
+        return 1
             if     $c->user_exists
                 && $c->check_any_user_role('admin');
     }
+
+    return 0;
 }
 
 

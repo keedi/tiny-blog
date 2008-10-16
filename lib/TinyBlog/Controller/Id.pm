@@ -132,9 +132,8 @@ END_PRINT
 sub id_edit :PathPart('edit') :Chained('id_view') :Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->forward('/user/check', [ 'edit' ]);
     $c->detach('access_denied')
-        unless $c->stash->{return};
+        unless $c->forward('/user/check', [ 'edit' ]);
 
     my $post = $c->stash->{post};
     my $id   = $c->stash->{id};
@@ -175,9 +174,8 @@ sub id_edit :PathPart('edit') :Chained('id_view') :Args(0) {
 sub id_delete :PathPart('delete') :Chained('id_view') :Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->forward('/user/check', [ 'delete' ]);
     $c->detach('access_denied')
-        unless $c->stash->{return};
+        unless $c->forward('/user/check', [ 'delete' ]);
 
     my $post = $c->stash->{post};
     my $id   = $c->stash->{id};
