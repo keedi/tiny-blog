@@ -10,6 +10,12 @@ use Text::MultiMarkdown 'markdown';
 use Encode 'decode';
 use HTML::TreeBuilder;
 
+my $m = Text::MultiMarkdown->new(
+    tab_width     => 2,
+    use_wikilinks => 0,
+    start_level   => 3,
+);
+
 #
 # idea stolen from http://www.cpanforum.com/threads/657
 #
@@ -141,8 +147,8 @@ sub end :Private {
             . $post->title
             . "]의 가장 최근 판은 "
             . "<a href=$url>이곳</a>에서 확인할 수 있습니다."
-            . "</p>"
-            . markdown( $post->contents )
+            . "</p>\n\n"
+            . $m->markdown( $post->contents )
             ;
         my $tree = HTML::TreeBuilder->new;
         $tree->parse_content($contents);
