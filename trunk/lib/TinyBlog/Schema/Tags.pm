@@ -31,7 +31,7 @@ __PACKAGE__->has_many(
 __PACKAGE__->many_to_many(
     posts => 'post_tags',
     'post',
-    { order_by => 'created_on DESC', },
+    { order_by => 'updated_on DESC', },
 );
 
 1;
