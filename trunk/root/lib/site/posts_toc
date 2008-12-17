@@ -21,7 +21,7 @@
 
   <ul>
     [% FOREACH post = posts -%]
-    <li><a href="[% c.uri_for("/id", post.id) | html %]">[% post.title | html %] - by [% post.author | html %]</a></li>
+    <li><a href="[% c.uri_for("/id", post.id) | html %]">[% post.title | html %] - by [% post.user_post.user.username | html %]</a></li>
     [% END -%]
   </ul>
 </div>
