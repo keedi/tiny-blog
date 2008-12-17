@@ -1,10 +1,10 @@
 CREATE TABLE posts (
-    id          INTEGER  NOT NULL,
-    author      TEXT     NOT NULL,
-    created_on  DATETIME NOT NULL,
-    updated_on  DATETIME NOT NULL,
-    title       TEXT     NOT NULL,
-    contents    LONGTEXT NOT NULL,
+    id           INTEGER  NOT NULL,
+    created_on   DATETIME NOT NULL,
+    updated_on   DATETIME NOT NULL,
+    published_on DATETIME NOT NULL,
+    title        TEXT     NOT NULL,
+    contents     LONGTEXT NOT NULL,
 
     PRIMARY KEY ( id )
 );
@@ -25,6 +25,13 @@ CREATE TABLE tags (
     name        TEXT     NOT NULL,
 
     PRIMARY KEY ( id )
+);
+
+CREATE TABLE post_users (
+    post_id     INTEGER NOT NULL,
+    user_id     INTEGER NOT NULL,
+
+    PRIMARY KEY ( post_id, user_id )
 );
 
 CREATE TABLE post_tags (
