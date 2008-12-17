@@ -17,6 +17,8 @@ sub insert {
         if $self->result_source->has_column('created_on');
     $self->updated_on( $date_str )
         if $self->result_source->has_column('updated_on');
+    $self->created_on( $date_str )
+        if $self->result_source->has_column('published_on');
     $self->next::method(@_);
 }
 
