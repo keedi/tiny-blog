@@ -1,4 +1,4 @@
-package TinyBlog::Schema::UsersReplies;
+package TinyBlog::Schema::UserReplies;
 
 use strict;
 use warnings;
