@@ -10,8 +10,6 @@ __PACKAGE__->table("replies");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "INTEGER", is_nullable => 0, size => undef },
-  "author",
-  { data_type => "TEXT", is_nullable => 0, size => undef },
   "created_on",
   { data_type => "DATETIME", is_nullable => 0, size => undef },
   "updated_on",
@@ -38,6 +36,11 @@ __PACKAGE__->has_many(
 __PACKAGE__->many_to_many(
     posts => 'post_replies',
     'post',
+);
+
+__PACKAGE__->has_one(
+    user_reply => 'TinyBlog::Schema::UserReplies',
+    { 'foreign.reply_id' => 'self.id' },
 );
 
 1;

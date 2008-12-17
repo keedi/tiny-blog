@@ -53,4 +53,9 @@ __PACKAGE__->many_to_many(
     { order_by => 'name ASC', },
 );
 
+__PACKAGE__->has_one(
+    user_post => 'TinyBlog::Schema::UserPosts',
+    { 'foreign.post_id' => 'self.id' },
+);
+
 1;

@@ -41,4 +41,28 @@ __PACKAGE__->many_to_many(
     'role',
 );
 
+__PACKAGE__->has_many(
+    user_posts => 'TinyBlog::Schema::UserPosts',
+    'user_id',
+    { cascading_delete => 1, },
+);
+
+__PACKAGE__->many_to_many(
+    posts => 'user_posts',
+    'post',
+    { order_by => 'updated_on DESC', },
+);
+
+__PACKAGE__->has_many(
+    user_replies => 'TinyBlog::Schema::UserReplies',
+    'user_id',
+    { cascading_delete => 1, },
+);
+
+__PACKAGE__->many_to_many(
+    replies => 'user_replies',
+    'reply',
+    { order_by => 'updated_on DESC', },
+);
+
 1;
