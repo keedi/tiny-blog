@@ -162,16 +162,16 @@ sub end :Private {
             $summary = $utf8_contents;
         }
 
-        $entry->title   ( $post->title  );
-        $entry->summary ( $summary      );
-        $entry->content ( $contents     );
-        $entry->author  ( $post->author );
-        $entry->link    ( $url          );
+        $entry->title   ( $post->title                     );
+        $entry->summary ( $summary                         );
+        $entry->content ( $contents                        );
+        $entry->author  ( $post->user_post->user->username );
+        $entry->link    ( $url                             );
 
         # FIXME $self->context 를 사용할 수 없다?
         my $timezone = $c->config->{timezone};
-        $entry->issued  ( $self->datetime( $post->created_on, $timezone ) );
-        $entry->modified( $self->datetime( $post->updated_on, $timezone ) );
+        $entry->issued  ( $self->datetime( $post->published_on, $timezone ) );
+        $entry->modified( $self->datetime( $post->updated_on,   $timezone ) );
 
         $feed->add_entry( $entry );
     }

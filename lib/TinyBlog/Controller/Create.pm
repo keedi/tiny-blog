@@ -35,10 +35,8 @@ sub index :Path :Args(0) {
 
     my @tags = map { s/^\s+//; s/\s+$//; $_ } split /,/, $tag;
     if ( $title && @tags && $contents ) {
-        my $author = $c->user->username;
 
         my $post = $c->model('DB::Posts')->find_or_new({id => undef});
-        $post->author  ($c->user->username);
         $post->title   ($title);
         $post->contents($contents);
         $post->update_or_insert;
@@ -53,6 +51,12 @@ sub index :Path :Args(0) {
             });
             $post_tag->update_or_insert;
         }
+
+        my $user_post = $c->model('DB::UserPosts')->find_or_new({
+            user_id => $c->user->id,
+            post_id => $post->id,
+        });
+        $user_post->update_or_insert;
 
         $c->flash->{status_msg} = "'$title' 글을 등록했습니다.";
         $c->response->redirect( $c->uri_for('/id/'.$post->id) );

@@ -107,8 +107,9 @@ sub id_print :PathPart('print') :Chained('id_view') :Args(0) {
             </p>
           </div>
           <p>
-            글쓴이: @{[$post->author]},
+            글쓴이: @{[$post->user_post->user->username]},
             작성: @{[$post->created_on]},
+            출판: @{[$post->published_on]},
             갱신: @{[$post->updated_on]}
           </p>
         </div> <!-- end meta    -->
