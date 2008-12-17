@@ -10,11 +10,11 @@ __PACKAGE__->table("posts");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "INTEGER", is_nullable => 0, size => undef },
-  "author",
-  { data_type => "TEXT", is_nullable => 0, size => undef },
   "created_on",
   { data_type => "DATETIME", is_nullable => 0, size => undef },
   "updated_on",
+  { data_type => "DATETIME", is_nullable => 0, size => undef },
+  "published_on",
   { data_type => "DATETIME", is_nullable => 0, size => undef },
   "title",
   { data_type => "TEXT", is_nullable => 0, size => undef },
