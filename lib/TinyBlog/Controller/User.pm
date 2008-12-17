@@ -42,8 +42,8 @@ sub login :Local {
     if ( $username && $password ) {
         if ( $c->authenticate({ username => $username,
                                 password => $password}) ) {
-            my $username = $c->user->username;
-            $c->flash->{status_msg} = "로그인 완료: $username";
+            my $nick = $c->user->nick;
+            $c->flash->{status_msg} = "로그인 완료: $nick";
             $c->response->redirect( $c->uri_for('/') );
             return;
         }
@@ -63,9 +63,9 @@ sub logout :Local {
     my ( $self, $c ) = @_;
 
     if ( $c->user_exists ) {
-        my $username = $c->user->username;
+        my $nick = $c->user->nick;
         $c->logout;
-        $c->flash->{status_msg} = "로그아웃 완료: $username";
+        $c->flash->{status_msg} = "로그아웃 완료: $nick";
         $c->response->redirect( $c->uri_for('/user/login') );
     }
     else {

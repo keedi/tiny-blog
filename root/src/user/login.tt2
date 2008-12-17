@@ -3,7 +3,7 @@
 
 <p>
 [% IF c.user_exists %]
-  '[% c.user.username %]'님은 로그인한 상태입니다.
+  '[% c.user.nick %]'님은 로그인한 상태입니다.
 [% ELSE %]
 <!-- 로그인 양식 -->
   <form method="post" action="[% c.uri_for('/user/login') %]">
