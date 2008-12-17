@@ -18,12 +18,12 @@
       갱신: [% post.updated_on | html %]
     </p>
     <p>
-      글쓴이: [% post.author | html %]
+      글쓴이: [% post.user_post.user.username | html %]
     </p>
     <p>
       <a href="[% c.uri_for('/id', post.id, 'print') | html %]">출력</a>
       [% IF c.user_exists %]
-        [% IF c.user.username == 'admin' OR c.user.username == post.author %]
+        [% IF c.user.username == 'admin' OR c.user.username == post.user_post.user.username %]
           <a href="[% c.uri_for('/id', post.id, 'edit') | html %]">고치기</a>
         [% END %]
       [% END %]
