@@ -162,11 +162,12 @@ sub end :Private {
             $summary = $utf8_contents;
         }
 
-        $entry->title   ( $post->title                     );
-        $entry->summary ( $summary                         );
-        $entry->content ( $contents                        );
-        $entry->author  ( $post->user_post->user->username );
-        $entry->link    ( $url                             );
+        $entry->title    ( $post->title                     );
+        $entry->summary  ( $summary                         );
+        $entry->content  ( $contents                        );
+        $entry->author   ( $post->user_post->user->username );
+        $entry->link     ( $url                             );
+        $entry->category ( $_->name                         ) for $post->tags;
 
         # FIXME $self->context 를 사용할 수 없다?
         my $timezone = $c->config->{timezone};
