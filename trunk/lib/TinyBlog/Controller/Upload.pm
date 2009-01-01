@@ -23,13 +23,20 @@ Catalyst Controller.
 
 =cut
 
-sub index :Path :Args(0) {
-    my ( $self, $c ) = @_;
+sub index :Path :Args {
+    my ( $self, $c, @path ) = @_;
 
     $c->detach('access_denied')
         unless $c->forward('/user/check', [ 'upload' ]);
 
-    #$c->response->body('Matched TinyBlog::Controller::Upload in Upload.');
+    if (@path) {
+        my $dirname = join '/', @path;
+        $c->stash->{title}   = "파일 업로드: $dirname";
+        $c->stash->{dirname} = $dirname;
+    }
+    else {
+        $c->stash->{dirname} = q{};
+    }
 }
 
 =head2 access_denied
