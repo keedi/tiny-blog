@@ -21,6 +21,8 @@ requires 'Catalyst::Plugin::Session';
 requires 'Catalyst::Plugin::Session::Store::FastMmap';
 requires 'Catalyst::Plugin::Session::State::Cookie';
 requires 'Catalyst::Plugin::Authorization::Roles';
+requires 'Catalyst::Plugin::Upload::Basename';
+requires 'Catalyst::Plugin::Upload::MD5';
 requires 'Text::MultiMarkdown';
 requires 'DateTime';
 requires 'HTML::FillInForm';
