@@ -103,6 +103,11 @@ sub check :Private {
             if     $c->user_exists
                 && $c->check_any_user_role('admin');
     }
+    if ( $rule eq 'upload' ) {
+        return 1
+            if     $c->user_exists
+                && $c->check_any_user_role('writer');
+    }
 
     return 0;
 }
