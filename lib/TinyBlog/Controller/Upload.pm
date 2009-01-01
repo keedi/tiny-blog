@@ -29,7 +29,7 @@ sub index :Path :Args(0) {
     $c->detach('access_denied')
         unless $c->forward('/user/check', [ 'upload' ]);
 
-    $c->response->body('Matched TinyBlog::Controller::Upload in Upload.');
+    #$c->response->body('Matched TinyBlog::Controller::Upload in Upload.');
 }
 
 =head2 access_denied
