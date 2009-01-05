@@ -69,7 +69,23 @@ sub index :Path :Args {
         return;
     }
 
-    if ( my $upload = $c->request->upload('file') ) {
+    if ( $c->request->params->{mkdir} ) {
+        my $mkdir = $c->request->params->{mkdir};
+        $mkdir =~ s/[`~!@#\$%^&*()=+\[{\]}\\|;:'",<>\/?]+/_/g;
+        $mkdir =~ s/\s+/_/g;
+        $mkdir =~ s/_+/_/g;
+
+        my $mkdir_path = "$dest_dir/$mkdir";
+        mkpath $mkdir_path unless -e $mkdir_path;
+        if (!-d $mkdir_path) {
+            $c->stash->{error_msg} = "[$mkdir] 디렉터리를 만들 수 없습니다.";
+        }
+        else {
+            $c->stash->{status_msg} = "[$mkdir] 디렉터리를 만들었습니다.";
+        }
+    }
+
+    if ( my $upload = $c->request->upload('mkfile') ) {
 
         my $upload_basename = basename( $upload->filename );
         $upload_basename =~ s/[`~!@#\$%^&*()=+\[{\]}\\|;:'",<>\/?]+/_/g;
