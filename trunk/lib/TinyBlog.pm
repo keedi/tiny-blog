@@ -26,7 +26,6 @@ use Catalyst qw/-Debug
 
                 FillInForm
 
-                Upload::Basename
                 Upload::MD5
                 /;
 our $VERSION = '0.01';
