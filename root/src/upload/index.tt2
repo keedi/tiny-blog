@@ -1,35 +1,58 @@
 [% META title = '파일 업로드' %]
 
+[% IF upload_dir %]
+  [% target_url = c.uri_for('/upload', upload_dir) %]
+[% ELSE %]
+  [% target_url = c.uri_for('/upload') %]
+[% END %]
+
 <div class="upload">
   <h3>[% title %]</h3>
 
-  <table>
-    <tr>
-      <form method="post" action="[% c.uri_for('/upload') %]" enctype="multipart/form-data">
-        <td> <label for="upload_file">파일이름:</label> </td>
-        <td> <input type="file" name="file" /> </td>
-        <td> <input type="submit" value="업로드" /> </td>
-      </form>
-    </tr>
-    <tr>
-      <form method="post" action="[% c.uri_for('/upload') %]">
-        <td> <label for="upload_file">생성할 디렉터리:</label> </td>
-        <td> <input type="text" name="dir" /> </td>
-        <td> <input type="submit" value="만들기" /> </td>
-      </form>
-    </tr>
-  </table>
+  [% IF show_upload %]
+    <table>
+      <tr>
+        <form method="post" action="[% target_url | html %]" enctype="multipart/form-data">
+          <td> <label for="upload_file">파일이름:</label> </td>
+          <td> <input type="file" name="file" /> </td>
+          <td> <input type="submit" value="업로드" /> </td>
+        </form>
+      </tr>
+      <tr>
+        <form method="post" action="[% target_url | html %]">
+          <td> <label for="upload_file">생성할 디렉터리:</label> </td>
+          <td> <input type="text" name="dir" /> </td>
+          <td> <input type="submit" value="만들기" /> </td>
+        </form>
+      </tr>
+    </table>
+  [% END %]
 
+  [% upload_dir | html %]/:
   <table border="1">
     <tr>
       <th>이름</th>
       <th>크기</th>
       <th>동작</th>
     </tr>
+
+    [% FOREACH dir IN dirs %]
+      [% IF upload_dir %]
+        [% dir_url = c.uri_for('/upload', upload_dir, dir.name) %]
+      [% ELSE %]
+        [% dir_url = c.uri_for('/upload', dir.name) %]
+      [% END %]
+      <tr>
+        <td><a href="[% dir_url | html %]">[% dir.name | html %]/</a></td>
+        <td></td>
+        <td>[이름변경|제거]</td>
+      </tr>
+    [% END %]
+
     [% FOREACH file IN files %]
       <tr>
-        <td>[% file.name %]</td>
-        <td>[% file.size %]</td>
+        <td>[% file.name | html %]</td>
+        <td>[% file.size | html %]</td>
         <td>[이름변경|제거]</td>
       </tr>
     [% END %]

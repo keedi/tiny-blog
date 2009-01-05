@@ -3,6 +3,7 @@ package TinyBlog::Controller::Upload;
 use strict;
 use warnings;
 use File::Path;
+use File::Basename;
 use parent 'Catalyst::Controller';
 
 =head1 NAME
@@ -30,25 +31,87 @@ sub index :Path :Args {
     $c->detach('access_denied')
         unless $c->forward('/user/check', [ 'upload' ]);
 
+    $c->stash->{show_upload} = 0;
+
+    # check temp directory for upload
+    mkpath $c->config->{uploadtmp} unless -e $c->config->{uploadtmp};
+    if (!-d $c->config->{uploadtmp}) {
+        $c->stash->{error_msg} = "업로드 공간을 찾을 수 없습니다.";
+        return;
+    }
+
+    # check user directory for copy file from temp directory
+    my $userdir = $c->config->{userdir}.'/'.$c->user->username;
+    mkpath $userdir unless -e $userdir;
+    if (!-d $userdir) {
+        $c->stash->{error_msg} = "사용자 디렉터리를 찾을 수 없습니다.";
+        return;
+    }
+
+    my $upload_dir;
+    my $dest_dir;
     if (@path) {
-        my $dirname = join '/', @path;
-        $c->stash->{title}   = "파일 업로드: $dirname";
-        $c->stash->{dirname} = $dirname;
+        $upload_dir = join '/', @path;
+        $dest_dir   = "$userdir/$upload_dir";
+
+        $c->stash->{title}   = "파일 업로드: $upload_dir";
     }
     else {
-        $c->stash->{dirname} = q{};
+        $upload_dir = q{};
+        $dest_dir   = $userdir;
     }
+    $c->stash->{upload_dir} = $upload_dir;
 
-    mkpath $c->config->{uploadtmp}
-        unless -e $c->config->{uploadtmp};
+    # check user specified directory
+    mkpath $dest_dir unless -e $dest_dir;
+    if (!-d $dest_dir) {
+        $c->stash->{error_msg} = "[$upload_dir] 디렉터리를 찾을 수 없습니다.";
+        return;
+    }
 
     if ( my $upload = $c->request->upload('file') ) {
-        my $userdir = $c->config->{userdir} . '/' . $c->user->username;
-        my $dest    = "$userdir/" . $upload->basename;
-        mkpath $userdir unless -e $userdir;
-        $upload->copy_to($dest);
-        $c->stash->{status_msg} = "upload to [". $upload->filename . "] -> [$dest]";
+
+        my $upload_basename = basename( $upload->filename );
+        $upload_basename =~ s/[`~!@#\$%^&*()=+\[{\]}\\|;:'",<>\/?]+/_/g;
+        $upload_basename =~ s/\s+/_/g;
+        $upload_basename =~ s/_+/_/g;
+
+        my $upload_path = $upload_dir ? "$upload_dir/$upload_basename" : $upload_basename;
+        my $dest_path   = "$dest_dir/$upload_basename";
+
+        if (!-e $dest_path) {
+            $upload->copy_to($dest_path);
+            $c->stash->{status_msg} = "[$upload_path] 업로드 완료";
+        }
+        else {
+            $c->stash->{error_msg} = "[$upload_path] 파일이 이미 존재합니다.";
+        }
     }
+
+    # for directory listing
+    if (opendir my $dh, $dest_dir) {
+        my @nodes = sort grep !/^\.{1,2}$/, readdir $dh;
+        my @files;
+        my @dirs;
+        for my $node ( @nodes ) {
+            my $path = "$dest_dir/$node";
+            if (-d $path) {
+                push @dirs, { name => $node };
+            }
+            else {
+                push @files, { name => $node, size => -s $path };
+            }
+        }
+        $c->stash->{nodes} = \@nodes;
+        $c->stash->{files} = \@files;
+        $c->stash->{dirs}  = \@dirs;
+    }
+    else {
+        $c->stash->{error_msg} = "[$upload_dir] 디렉터리를 열람할 수 없습니다.";
+        return;
+    }
+
+    $c->stash->{show_upload} = 1;
 }
 
 =head2 access_denied
