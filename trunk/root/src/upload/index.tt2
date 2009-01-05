@@ -14,14 +14,14 @@
       <tr>
         <form method="post" action="[% target_url | html %]" enctype="multipart/form-data">
           <td> <label for="upload_file">파일이름:</label> </td>
-          <td> <input type="file" name="file" /> </td>
+          <td> <input type="file" name="mkfile" /> </td>
           <td> <input type="submit" value="업로드" /> </td>
         </form>
       </tr>
       <tr>
         <form method="post" action="[% target_url | html %]">
           <td> <label for="upload_file">생성할 디렉터리:</label> </td>
-          <td> <input type="text" name="dir" /> </td>
+          <td> <input type="text" name="mkdir" /> </td>
           <td> <input type="submit" value="만들기" /> </td>
         </form>
       </tr>
