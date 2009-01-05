@@ -2,6 +2,7 @@ package TinyBlog::Controller::Upload;
 
 use strict;
 use warnings;
+use File::Path;
 use parent 'Catalyst::Controller';
 
 =head1 NAME
@@ -36,6 +37,17 @@ sub index :Path :Args {
     }
     else {
         $c->stash->{dirname} = q{};
+    }
+
+    mkpath $c->config->{uploadtmp}
+        unless -e $c->config->{uploadtmp};
+
+    if ( my $upload = $c->request->upload('file') ) {
+        my $userdir = $c->config->{userdir} . '/' . $c->user->username;
+        my $dest    = "$userdir/" . $upload->basename;
+        mkpath $userdir unless -e $userdir;
+        $upload->copy_to($dest);
+        $c->stash->{status_msg} = "upload to [". $upload->filename . "] -> [$dest]";
     }
 }
 
