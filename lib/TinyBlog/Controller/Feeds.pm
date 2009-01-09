@@ -93,6 +93,7 @@ sub posts :Local {
     my ( $self, $c, $feed_type ) = @_;
 
     $c->stash->{posts} = [ $c->model('DB')->get_recent_posts ];
+    $c->stash->{feeds_postfix} = q{posts};
 }
 
 =head2 comments
@@ -105,6 +106,7 @@ sub comments :Local {
     my ( $self, $c, $feed_type ) = @_;
 
     $c->stash->{posts} = [ ];
+    $c->stash->{feeds_postfix} = q{};
 }
 
 =head2 tags
@@ -117,6 +119,7 @@ sub tags :Local {
     my ( $self, $c, @tags ) = @_;
 
     $c->stash->{posts} = [ $c->model('DB')->get_posts_from_tags(@tags) ];
+    $c->stash->{feeds_postfix} = join('/', 'tags', sort @tags);
 }
 
 =head2 end
@@ -128,14 +131,20 @@ sub tags :Local {
 sub end :Private {
     my ( $self, $c ) = @_;
 
-    my $feed = XML::Feed->new( $c->stash->{type} );
+    # FIXME $self->context 를 사용할 수 없다?
+    my $timezone = $c->config->{timezone};
+    my @posts_rs = $c->stash->{posts} ? @{ $c->stash->{posts} } : ();
+
+    my $feed = XML::Feed->new( $c->stash->{type}  );
     $feed->title      ( $c->config->{title}       );
     $feed->description( $c->config->{description} );
     $feed->author     ( $c->config->{author}      );
     $feed->language   ( $c->config->{language}    );
+    $feed->generator  ( 'Tiny Blog 0.01'          );
     $feed->link       ( $c->uri_for('/')          );
+    $feed->self_link  ( $c->uri_for(join('/', '/feeds', $c->stash->{feeds_postfix})) );
+    $feed->modified   ( $self->datetime( $posts_rs[0]->updated_on, $timezone )       ) if @posts_rs;
 
-    my @posts_rs = $c->stash->{posts} ? @{ $c->stash->{posts} } : ();
     for my $post ( @posts_rs ) {
 
         my $entry = XML::Feed::Entry->new( $c->stash->{type} );
@@ -168,11 +177,8 @@ sub end :Private {
         $entry->author   ( $post->user_post->user->username );
         $entry->link     ( $url                             );
         $entry->category ( $_->name                         ) for $post->tags;
-
-        # FIXME $self->context 를 사용할 수 없다?
-        my $timezone = $c->config->{timezone};
-        $entry->issued  ( $self->datetime( $post->published_on, $timezone ) );
-        $entry->modified( $self->datetime( $post->updated_on,   $timezone ) );
+        $entry->issued   ( $self->datetime( $post->published_on, $timezone ) );
+        $entry->modified ( $self->datetime( $post->updated_on,   $timezone ) );
 
         $feed->add_entry( $entry );
     }
