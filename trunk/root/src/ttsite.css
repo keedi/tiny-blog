@@ -143,6 +143,14 @@ h6 {
     line-height: 1.2em;
 }
 
+.post_content pre {
+    line-height: 1.1em;
+    font-size: 0.8em;
+    background-color: [% site.col.post_content_pre %];
+    padding-top:    10px;
+    padding-bottom: 10px;
+}
+
 h1, h1 a, h1 a:hover, h1 a:visited, #headerimg {
     text-decoration: none;
     color: [% site.col.head_text %];
