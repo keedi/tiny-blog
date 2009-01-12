@@ -8,6 +8,8 @@
      green  = '#66AA66'
      blue   = '#89b8df'
      orange = '#f08900'
+
+     lightyellow = '#e7e7bb'
    };
 
    site.col = {
@@ -35,5 +37,7 @@
 
       post_title      = site.rgb.grey1
       post_title_over = site.rgb.orange
+
+      post_content_pre = site.rgb.lightyellow
    };
 %]
