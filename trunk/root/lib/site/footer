@@ -1,7 +1,7 @@
 <!-- BEGIN site/footer -->
 <div id="copyright">
-  &copy; [% site.copyright %],
-  [% c.config.name %] is proudly powered by
+  &copy; [% site.copyright or c.config.copyright | html %],
+  [% c.config.name | html %] is proudly powered by
   <a href="http://www.catalystframework.org/">Catalyst</a>
   <br/>
   <a href="[% c.uri_for('/feeds/posts') %]">Entries (Atom)</a>
