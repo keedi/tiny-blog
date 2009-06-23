@@ -94,7 +94,7 @@ sub check :Private {
             if     $c->user_exists
                 && $c->check_any_user_role('writer')
                 && (
-                       $c->user->username eq $c->stash->{post}->author
+                       $c->user->username eq $c->stash->{post}->user_post->user->username
                     || $c->check_any_user_role('admin')
                 );
     }
