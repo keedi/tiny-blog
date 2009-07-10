@@ -174,7 +174,14 @@ sub end :Private {
         $entry->title    ( $post->title                     );
         $entry->summary  ( $summary                         );
         $entry->content  ( $contents                        );
-        $entry->author   ( $post->user_post->user->username );
+
+        if ( $post->user_post ) {
+            $entry->author   ( $post->user_post->user->username );
+        }
+        else {
+            $c->log->debug("Error: check database: ", $entry->title);
+        }
+
         $entry->link     ( $url                             );
         $entry->category ( $_->name                         ) for $post->tags;
         $entry->issued   ( $self->datetime( $post->published_on, $timezone ) );
