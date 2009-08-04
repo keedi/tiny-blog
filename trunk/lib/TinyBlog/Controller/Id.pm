@@ -79,6 +79,22 @@ sub id_print :PathPart('print') :Chained('id_view') :Args(0) {
   <title>[@{[$c->config->{title}]}] @{[$post->title]}</title>
 </head>
 
+<style type="text/css" media="screen">
+code, pre {
+    font: 12px Monospace, Fixed;
+}
+
+pre {
+    background-color: #f9f9f9;
+    color: #110000;
+    margin: 0 0 1.5em;
+    border: 1px solid silver;
+    padding: 2px 4px;
+    overflow: auto;
+    width: auto;
+}
+</style>
+
 <body>
   <div id="page">
 
