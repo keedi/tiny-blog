@@ -11,6 +11,11 @@ body {
     height: 100%;
     font-size: 10pt;
     font-family: 'Malgun Gothic', 'Lucida Grande', Verdana, Arial, Sans-Serif;
+    text-align: center;
+}
+
+#content {
+    text-align: left;
 }
 
 #page {
